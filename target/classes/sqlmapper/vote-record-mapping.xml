@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.crazyBird.dao.vote.VoteRecordDao">
+	<insert id="insertVoteRecord" 
+		parameterType="com.crazyBird.dao.vote.dataobject.VoteRecordDO">
+		INSERT into vote_record (
+		id,
+		student_id,
+		action_id,
+		detail,
+		gmt_created,
+		gmt_modified
+		) VALUES
+		(
+		#{id,jdbcType=BIGINT},
+		#{studentId,jdbcType=BIGINT},
+		#{actionId,jdbcType=BIGINT},
+		#{detail,jdbcType=VARCHAR},
+		NOW(),
+		NOW())
+	</insert>
+	<select id="checkVoteRecord" resultType="java.lang.Integer" parameterType="com.crazyBird.dao.vote.dataobject.VoteRecordDO">
+	select 1 from vote_record where  action_id=#{actionId,jdbcType=BIGINT} and student_id=#{studentId,jdbcType=BIGINT} limit 1
+	</select>
+</mapper>

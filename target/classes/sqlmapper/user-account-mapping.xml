@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.crazyBird.dao.user.UserLoginDao">
+	<resultMap id="BaseResultMap"
+		type="com.crazyBird.dao.user.dataobject.UserDO">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="login_account" property="loginAccount"
+			jdbcType="VARCHAR" />
+		<result column="user_name" property="userName"
+			jdbcType="VARCHAR" />
+	</resultMap>
+	<resultMap id="ResultMap"
+		type="com.crazyBird.dao.user.dataobject.studentDO">
+		<id column="sid" property="sid" jdbcType="INTEGER" />
+		<result column="sname" property="sname" jdbcType="VARCHAR" />
+		<result column="saddress" property="saddress"
+			jdbcType="VARCHAR" />
+		<result column="slikes" property="slikes" jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id,login_account,user_name
+	</sql>
+	<select id="getLoginAccount" resultMap="BaseResultMap"
+		parameterType="com.crazyBird.dao.user.dataobject.UserLoginDO">
+		select
+		<include refid="Base_Column_List" />
+		from user_account where login_account =
+		#{loginAccount,jdbcType=VARCHAR} and password=
+		#{password,jdbcType=VARCHAR}
+	</select>
+	<select id="select"
+		parameterType="com.crazyBird.dao.user.dataobject.lgDO"
+		resultType="Integer">
+		select 1 from aaa where ac=#{ac,jdbcType=VARCHAR} AND
+		ps=#{ps,jdbcType=VARCHAR}
+	</select>
+	<select id="login"
+		parameterType="com.crazyBird.dao.user.dataobject.logDO"
+		resultType="com.crazyBird.dao.user.dataobject.adminDO">
+		select * from admin where aname=#{aname,jdbcType=VARCHAR} AND
+		apass=#{apass,jdbcType=VARCHAR}
+	</select>
+	<select id="count"
+		parameterType="java.lang.String"
+		resultType="java.lang.Integer">
+		select count(1) from student where sname like "%"#{param1}"%"
+	</select>
+	<select id="queryStudent" parameterType="com.crazyBird.dao.user.dataobject.StudentPO"
+		resultMap="ResultMap">
+		select * from student where sname like "%"#{sname}"%" 
+		limit #{startPos,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
+	</select>
+	<insert id="signin" parameterType="com.crazyBird.dao.user.dataobject.adminSignDO" useGeneratedKeys="true" keyProperty="id" >
+		insert into admin(aname, apass,aemail,asafepass,code,status) values(#{aname,jdbcType=VARCHAR},
+		 #{apass,jdbcType=VARCHAR},#{aemail,jdbcType=VARCHAR},#{asafepass,jdbcType=VARCHAR},
+		 #{code,jdbcType=VARCHAR},#{status,jdbcType=VARCHAR})
+	</insert>
+	<select id="check"
+		parameterType="com.crazyBird.dao.user.dataobject.adminSignDO"
+		resultType="Integer">
+		select 1 from admin where aname=#{aname,jdbcType=VARCHAR} AND
+		asafepass=#{asafepass,jdbcType=VARCHAR}
+	</select>
+	<update id="resetPass" parameterType="com.crazyBird.dao.user.dataobject.adminSignDO">
+		update  admin set apass=#{apass,jdbcType=VARCHAR} where id=#{id,jdbcType=INTEGER}
+	</update>
+	<select id="findName"
+		parameterType="java.lang.String"
+		resultType="java.lang.Integer">
+		select 1 from admin where aname=#{param1}
+	</select>
+	<update id="updateStatus" parameterType="String">
+		update  admin set status="Y" where code=#{code} and status="N"
+	</update>
+</mapper>
